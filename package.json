@@ -1,0 +1,37 @@
+{
+  "name": "fetch-reddit",
+  "version": "0.0.1",
+  "description": "Easily fetch links from Reddit subs and threads",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "standard",
+    "test": "mocha test --compilers js:babel/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CookPete/fetch-reddit.git"
+  },
+  "keywords": [
+    "reddit",
+    "fetch",
+    "api",
+    "links"
+  ],
+  "author": "Pete Cook <pete@cookpete.com> (http://github.com/cookpete)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CookPete/fetch-reddit/issues"
+  },
+  "homepage": "https://github.com/CookPete/fetch-reddit",
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "qs": "^4.0.0"
+  },
+  "standard": {
+    "global": [ "fetch" ]
+  }
+}
