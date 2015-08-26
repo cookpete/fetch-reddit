@@ -1,7 +1,7 @@
 fetch-reddit
 ============
 
-A react component for playing media from YouTube, SoundCloud or Vimeo.
+A utility function for fetching links from subreddits or Reddit comment threads
 
 ### Usage
 
