@@ -2,11 +2,12 @@
   "name": "fetch-reddit",
   "version": "0.0.1",
   "description": "Easily fetch links from Reddit subs and threads",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "standard",
     "test": "mocha test --compilers js:babel/register",
-    "build": "mkdir -p dist; browserify -t babelify -e src/index.js -o dist/index.js"
+    "build": "babel src/ -d lib/",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
