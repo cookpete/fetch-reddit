@@ -6,7 +6,7 @@ A react component for playing media from YouTube, SoundCloud or Vimeo.
 ### Usage
 
 ```bash
-npm install --save git://github.com/cookpete/fetch-reddit
+npm install fetch-reddit --save
 ```
 
 ```js
