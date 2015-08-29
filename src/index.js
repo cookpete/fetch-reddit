@@ -25,17 +25,13 @@ export function extractPosts (data) {
   let posts = []
   if (data instanceof Array) {
     data.forEach(post => posts = posts.concat(extractPosts(post)))
-  }
-  if (data.json) {
+  } else if (data.json) {
     data.json.data.things.forEach(post => posts = posts.concat(extractPosts(post)))
-  }
-  if (data.kind === KIND_LISTING) {
+  } else if (data.kind === KIND_LISTING) {
     data.data.children.forEach(post => posts = posts.concat(extractPosts(post)))
-  }
-  if (data.kind === KIND_POST) {
+  } else if (data.kind === KIND_POST && !data.data.is_self) {
     posts.push(postFromPost(data.data))
-  }
-  if (data.kind === KIND_COMMENT) {
+  } else if (data.kind === KIND_COMMENT || data.data.is_self) {
     posts = posts.concat(extractFromComment(data))
   }
   return posts
@@ -46,7 +42,7 @@ function extractFromComment (post) {
   if (post.kind === 'more') {
     return posts
   }
-  post.data.body.replace(MATCH_REPLY_URLS, (match, title, url) => {
+  getText(post).replace(MATCH_REPLY_URLS, (match, title, url) => {
     posts.push(postFromComment(post, match, title, url))
   })
   if (post.data.replies) {
@@ -105,7 +101,7 @@ function postFromPost (post) {
 
 function postFromComment (post, match, title, url) {
   // If the post is just text then a link, use the text as the title
-  let remaining = post.data.body.replace(match, '')
+  let remaining = getText(post).replace(match, '')
   if (!title && remaining.length < 256 && !MATCH_REPLY_URLS.test(remaining)) {
     title = remaining.trim()
   }
@@ -116,4 +112,8 @@ function postFromComment (post, match, title, url) {
     created: new Date(post.data.created_utc * 1000),
     author: post.data.author
   }
+}
+
+function getText (post) {
+  return post.data.body || post.data.selftext || ''
 }
