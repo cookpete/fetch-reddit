@@ -102,7 +102,7 @@ function postFromPost (post) {
 function postFromComment (post, match, title, url) {
   // If the post is just text then a link, use the text as the title
   let remaining = getText(post).replace(match, '')
-  if (!title && remaining.length < 256 && !MATCH_REPLY_URLS.test(remaining)) {
+  if (!title && remaining.length < 128 && !MATCH_REPLY_URLS.test(remaining)) {
     title = remaining.trim()
   }
   return {
