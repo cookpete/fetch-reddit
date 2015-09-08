@@ -95,7 +95,8 @@ function postFromPost (post) {
     url: post.url,
     thumbnail: post.thumbnail,
     created: new Date(post.created_utc * 1000),
-    author: post.author
+    author: post.author,
+    score: post.score
   }
 }
 
@@ -110,7 +111,8 @@ function postFromComment (post, match, title, url) {
     title,
     url,
     created: new Date(post.data.created_utc * 1000),
-    author: post.data.author
+    author: post.data.author,
+    score: post.data.score
   }
 }
 
