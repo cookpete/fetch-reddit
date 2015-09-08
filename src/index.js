@@ -42,8 +42,8 @@ function extractFromComment (post) {
   if (post.kind === 'more') {
     return posts
   }
-  getText(post).replace(MATCH_REPLY_URLS, (match, title, url) => {
-    posts.push(postFromComment(post, match, title, url))
+  getText(post.data).replace(MATCH_REPLY_URLS, (match, title, url) => {
+    posts.push(postFromComment(post.data, match, title, url))
   })
   if (post.data.replies) {
     post.data.replies.data.children.forEach(reply => {
@@ -110,12 +110,12 @@ function postFromComment (post, match, title, url) {
     id: url,
     title,
     url,
-    created: new Date(post.data.created_utc * 1000),
-    author: post.data.author,
-    score: post.data.score
+    created: new Date(post.created_utc * 1000),
+    author: post.author,
+    score: post.score
   }
 }
 
 function getText (post) {
-  return post.data.body || post.data.selftext || ''
+  return post.body || post.selftext || ''
 }
