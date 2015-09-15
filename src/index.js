@@ -100,11 +100,11 @@ function postFromPost (post) {
   }
 }
 
-function postFromComment (post, match, title, url) {
-  // If the post is just text then a link, use the text as the title
-  let remaining = getText(post).replace(match, '')
-  if (!title && remaining.length < 128 && !MATCH_REPLY_URLS.test(remaining)) {
-    title = remaining.trim()
+function postFromComment (post, match, title = null, url) {
+  // If the post is just text and a link, use the text as the title
+  const remaining = getText(post).replace(match, '').trim()
+  if (!title && remaining.length < 128 && !remaining.match(MATCH_REPLY_URLS)) {
+    title = remaining
   }
   return {
     id: url,

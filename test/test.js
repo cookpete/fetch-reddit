@@ -10,6 +10,7 @@ import comments from './data/whats_an_instrumental_song_that_everyone_knows'
 import morechildren from './data/morechildren'
 import inferTitle from './data/reply-infer-title'
 import selfPost from './data/what_are_your_favorite_i_hate_you_songs'
+import twoLinks from './data/two-links'
 
 describe('extractPosts', () => {
   it('subreddit', () => {
@@ -63,6 +64,15 @@ describe('extractPosts', () => {
     links.forEach(verifyPost)
     assert.propertyVal(links[0], 'title', 'Everything About You')
     assert.propertyVal(links[0], 'url', 'https://www.youtube.com/watch?v=byEGjLU2egA')
+  })
+
+  it('null titles with several links in a comment', () => {
+    let links = extractPosts(twoLinks)
+    assert.typeOf(links, 'array')
+    assert.lengthOf(links, 2)
+    links.forEach(verifyPost)
+    assert.propertyVal(links[0], 'title', null)
+    assert.propertyVal(links[1], 'title', null)
   })
 })
 
