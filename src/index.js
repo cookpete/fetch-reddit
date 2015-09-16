@@ -42,8 +42,8 @@ function extractFromComment (post) {
   if (post.kind === 'more') {
     return posts
   }
-  getText(post.data).replace(MATCH_REPLY_URLS, (match, title, url) => {
-    posts.push(postFromComment(post.data, match, title, url))
+  getText(post.data).replace(MATCH_REPLY_URLS, (match, title, url, offset) => {
+    posts.push(postFromComment(post.data, match, title, url, offset))
   })
   if (post.data.replies) {
     post.data.replies.data.children.forEach(reply => {
@@ -100,14 +100,14 @@ function postFromPost (post) {
   }
 }
 
-function postFromComment (post, match, title = null, url) {
+function postFromComment (post, match, title = null, url, offset) {
   // If the post is just text and a link, use the text as the title
   const remaining = getText(post).replace(match, '').trim()
   if (!title && remaining.length < 128 && !remaining.match(MATCH_REPLY_URLS)) {
     title = remaining
   }
   return {
-    id: url,
+    id: post.id + ':' + offset,
     title,
     url,
     created: new Date(post.created_utc * 1000),
