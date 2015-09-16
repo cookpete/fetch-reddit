@@ -96,7 +96,8 @@ function postFromPost (post) {
     thumbnail: post.thumbnail,
     created: new Date(post.created_utc * 1000),
     author: post.author,
-    score: post.score
+    score: post.score,
+    subreddit: post.subreddit
   }
 }
 
@@ -112,7 +113,8 @@ function postFromComment (post, match, title = null, url, offset) {
     url,
     created: new Date(post.created_utc * 1000),
     author: post.author,
-    score: post.score
+    score: post.score,
+    subreddit: post.subreddit
   }
 }
 
