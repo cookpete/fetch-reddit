@@ -99,11 +99,14 @@ function postFromPost (post) {
     id: post.id,
     title: post.title,
     url: post.url,
-    thumbnail: post.thumbnail,
     created: new Date(post.created_utc * 1000),
     author: post.author,
     score: post.score,
-    subreddit: post.subreddit
+    subreddit: post.subreddit,
+    // Post-specific fields
+    thumbnail: post.thumbnail,
+    num_comments: post.num_comments,
+    permalink: post.permalink
   }
 }
 
@@ -120,7 +123,9 @@ function postFromComment (post, match, title = null, url, offset) {
     created: new Date(post.created_utc * 1000),
     author: post.author,
     score: post.score,
-    subreddit: post.subreddit
+    subreddit: post.subreddit,
+    // Comment-specific fields
+    comment_id: post.id
   }
 }
 

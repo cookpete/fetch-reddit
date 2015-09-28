@@ -93,5 +93,6 @@ function verifyPost (post) {
   assert.property(post, 'url')
   assert.property(post, 'created')
   assert.property(post, 'author')
+  assert.property(post, 'score')
   assert.property(post, 'subreddit')
 }
