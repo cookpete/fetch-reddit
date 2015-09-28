@@ -3,6 +3,7 @@ import { stringify } from 'qs'
 const API_URL = 'https://www.reddit.com'
 const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
 const REPLACE_CHAR = String.fromCharCode(0)
+const INFER_TITLE_MAX_LENGTH = 128 // Max length of remaining text to use as a title for a link
 
 const KIND_COMMENT = 't1'
 const KIND_POST = 't3'
@@ -111,9 +112,9 @@ function postFromPost (post) {
 }
 
 function postFromComment (post, match, title = null, url, offset) {
-  // If the post is just text and a link, use the text as the title
+  // If the post is just a small amount of text and a link, use the text as the title
   const remaining = getText(post).replace(match, '').trim()
-  if (!title && remaining.length < 128 && !remaining.match(MATCH_REPLY_URLS)) {
+  if (!title && remaining.length < INFER_TITLE_MAX_LENGTH && !remaining.match(MATCH_REPLY_URLS)) {
     title = remaining
   }
   return {
