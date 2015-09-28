@@ -2,6 +2,7 @@ import { stringify } from 'qs'
 
 const API_URL = 'https://www.reddit.com'
 const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
+const REPLACE_CHAR = String.fromCharCode(0)
 
 const KIND_COMMENT = 't1'
 const KIND_POST = 't3'
@@ -42,7 +43,12 @@ function extractFromComment (post) {
   if (post.kind === 'more') {
     return posts
   }
-  getText(post.data).replace(MATCH_REPLY_URLS, (match, title, url, offset) => {
+  // Use REPLACE_CHAR to avoid regex problems with escaped ] characters within the title string
+  getText(post.data).replace(/\\]/g, REPLACE_CHAR).replace(MATCH_REPLY_URLS, (match, title, url, offset) => {
+    if (title) {
+      // Bring back the removed ] and then we can safely unescape everything
+      title = title.replace(new RegExp(REPLACE_CHAR, 'g'), '\\]').replace(/\\(.)/g, '$1')
+    }
     posts.push(postFromComment(post.data, match, title, url, offset))
   })
   if (post.data.replies) {

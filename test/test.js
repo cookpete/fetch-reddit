@@ -11,6 +11,7 @@ import morechildren from './data/morechildren'
 import inferTitle from './data/reply-infer-title'
 import selfPost from './data/what_are_your_favorite_i_hate_you_songs'
 import twoLinks from './data/two-links'
+import escapedTitles from './data/escaped-titles'
 
 describe('extractPosts', () => {
   it('subreddit', () => {
@@ -73,6 +74,15 @@ describe('extractPosts', () => {
     links.forEach(verifyPost)
     assert.propertyVal(links[0], 'title', null)
     assert.propertyVal(links[1], 'title', null)
+  })
+
+  it('deals with escaped characters within titles', () => {
+    let links = extractPosts(escapedTitles)
+    assert.typeOf(links, 'array')
+    assert.lengthOf(links, 50)
+    links.forEach(verifyPost)
+    assert.propertyVal(links[0], 'title', 'Seasick Steve - Cut My Wings [Blues]')
+    assert.propertyVal(links[1], 'title', 'Long Line Down -- The Devil\'s Hand [Dirty Garage Blues](2015)')
   })
 })
 
