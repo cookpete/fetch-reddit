@@ -1,6 +1,6 @@
 import { stringify } from 'qs'
 
-const API_URL = 'https://www.reddit.com'
+const REDDIT_URL = 'https://www.reddit.com'
 const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
 const REPLACE_CHAR = String.fromCharCode(0)
 const INFER_TITLE_MAX_LENGTH = 128 // Max length of remaining text to use as a title for a link
@@ -11,38 +11,38 @@ const KIND_LISTING = 'Listing'
 
 function get (path, query) {
   path = path[0] === '/' ? path : '/' + path
-  return fetch(API_URL + path + '.json?' + stringify(query))
+  return fetch(REDDIT_URL + path + '.json?' + stringify(query))
     .then(response => response.json())
 }
 
 export function getPosts (path, query = {}) {
   return get(path, query)
     .then(data => ({
-      posts: extractPosts(data),
+      posts: extractPosts(data, path),
       loadMore: getLoadMoreFn(data, { path, query })
     }))
 }
 
-export function extractPosts (data) {
+export function extractPosts (data, path) {
   if (data instanceof Array) {
-    return data.reduce((posts, post) => posts.concat(extractPosts(post)), [])
+    return data.reduce((posts, post) => posts.concat(extractPosts(post, path)), [])
   }
   if (data.json) {
-    return extractPosts(data.json.data.things)
+    return extractPosts(data.json.data.things, path)
   }
   if (data.kind === KIND_LISTING) {
-    return extractPosts(data.data.children)
+    return extractPosts(data.data.children, path)
   }
   if (data.kind === KIND_POST && !data.data.is_self) {
     return postFromPost(data.data)
   }
   if (data.kind === KIND_COMMENT || data.data.is_self) {
-    return extractFromComment(data)
+    return extractFromComment(data, path)
   }
   return []
 }
 
-function extractFromComment (post) {
+function extractFromComment (post, path) {
   let posts = []
   if (post.kind === 'more') {
     return posts
@@ -53,12 +53,12 @@ function extractFromComment (post) {
       // Bring back the removed ] and then we can safely unescape everything
       title = title.replace(new RegExp(REPLACE_CHAR, 'g'), '\\]').replace(/\\(.)/g, '$1')
     }
-    posts.push(postFromComment(post.data, match, title, url, offset))
+    posts.push(postFromComment(post.data, match, title, url, offset, path))
   })
   if (post.data.replies) {
     post.data.replies.data.children.forEach(reply => {
       if (reply.kind === KIND_COMMENT) {
-        posts = posts.concat(extractFromComment(reply))
+        posts = posts.concat(extractFromComment(reply, path))
       }
     })
   }
@@ -107,14 +107,14 @@ function postFromPost (post) {
     author: post.author,
     score: post.score,
     subreddit: post.subreddit,
+    permalink: getPermalink(post),
     // Post-specific fields
     thumbnail: post.thumbnail,
-    num_comments: post.num_comments,
-    permalink: post.permalink
+    num_comments: post.num_comments
   }
 }
 
-function postFromComment (post, match, title = null, url, offset) {
+function postFromComment (post, match, title = null, url, offset, path) {
   // If the post is just a small amount of text and a link, use the text as the title
   const remaining = getText(post).replace(match, '').trim()
   if (!title && remaining.length < INFER_TITLE_MAX_LENGTH && !remaining.match(MATCH_REPLY_URLS)) {
@@ -128,6 +128,7 @@ function postFromComment (post, match, title = null, url, offset) {
     author: post.author,
     score: post.score,
     subreddit: post.subreddit,
+    permalink: getPermalink(post, path),
     // Comment-specific fields
     comment_id: post.id
   }
@@ -135,4 +136,11 @@ function postFromComment (post, match, title = null, url, offset) {
 
 function getText (post) {
   return post.body || post.selftext || ''
+}
+
+function getPermalink (post, path) {
+  if (post.permalink) {
+    return REDDIT_URL + post.permalink
+  }
+  return REDDIT_URL + path + '/' + post.id
 }
