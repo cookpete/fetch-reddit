@@ -24,19 +24,22 @@ export function getPosts (path, query = {}) {
 }
 
 export function extractPosts (data) {
-  let posts = []
   if (data instanceof Array) {
-    data.forEach(post => posts = posts.concat(extractPosts(post)))
-  } else if (data.json) {
-    data.json.data.things.forEach(post => posts = posts.concat(extractPosts(post)))
-  } else if (data.kind === KIND_LISTING) {
-    data.data.children.forEach(post => posts = posts.concat(extractPosts(post)))
-  } else if (data.kind === KIND_POST && !data.data.is_self) {
-    posts.push(postFromPost(data.data))
-  } else if (data.kind === KIND_COMMENT || data.data.is_self) {
-    posts = posts.concat(extractFromComment(data))
+    return data.reduce((posts, post) => posts.concat(extractPosts(post)), [])
   }
-  return posts
+  if (data.json) {
+    return extractPosts(data.json.data.things)
+  }
+  if (data.kind === KIND_LISTING) {
+    return extractPosts(data.data.children)
+  }
+  if (data.kind === KIND_POST && !data.data.is_self) {
+    return postFromPost(data.data)
+  }
+  if (data.kind === KIND_COMMENT || data.data.is_self) {
+    return extractFromComment(data)
+  }
+  return []
 }
 
 function extractFromComment (post) {
