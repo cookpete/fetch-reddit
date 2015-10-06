@@ -1,6 +1,6 @@
 {
   "name": "fetch-reddit",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Easily fetch links from Reddit subs and threads",
   "main": "lib/index.js",
   "scripts": {
