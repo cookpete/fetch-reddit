@@ -1,4 +1,9 @@
 import { stringify } from 'qs'
+import node_fetch from 'node-fetch'
+
+if (typeof fetch !== 'function') {
+  let fetch = node_fetch;
+}
 
 const REDDIT_URL = 'https://www.reddit.com'
 const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
