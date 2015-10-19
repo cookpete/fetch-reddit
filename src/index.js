@@ -1,3 +1,4 @@
+import 'isomorphic-fetch'
 import { stringify } from 'qs'
 
 const REDDIT_URL = 'https://www.reddit.com'
