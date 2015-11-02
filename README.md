@@ -1,6 +1,8 @@
 fetch-reddit
 ============
 
+[![Build Status](https://travis-ci.org/CookPete/fetch-reddit.svg)](https://travis-ci.org/CookPete/fetch-reddit)
+
 A utility function for fetching links from subreddits or Reddit comment threads
 
 ### Usage
