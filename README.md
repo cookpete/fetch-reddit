@@ -2,6 +2,8 @@ fetch-reddit
 ============
 
 [![Build Status](https://travis-ci.org/CookPete/fetch-reddit.svg)](https://travis-ci.org/CookPete/fetch-reddit)
+[![Dependency Status](https://david-dm.org/CookPete/fetch-reddit.svg)](https://david-dm.org/CookPete/fetch-reddit)
+[![devDependency Status](https://david-dm.org/CookPete/fetch-reddit/dev-status.svg)](https://david-dm.org/CookPete/fetch-reddit#info=devDependencies)
 
 A utility function for fetching links from subreddits or Reddit comment threads
 
