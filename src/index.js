@@ -1,5 +1,5 @@
 import 'isomorphic-fetch'
-import { stringify } from 'qs'
+import { stringify } from 'query-string'
 
 const REDDIT_URL = 'https://www.reddit.com'
 const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
