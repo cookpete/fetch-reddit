@@ -6,8 +6,10 @@
   "scripts": {
     "lint": "standard",
     "test": "mocha test --compilers js:babel-core/register",
-    "build": "babel src/ -d lib/",
-    "prepublish": "npm run build"
+    "build": "babel src -d lib",
+    "clean": "rimraf lib",
+    "prepublish": "npm run build",
+    "postpublish": "npm run clean"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,7 @@
     "babel-preset-stage-0": "^6.1.18",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
+    "rimraf": "^2.4.3",
     "standard": "^5.3.1"
   },
   "dependencies": {
