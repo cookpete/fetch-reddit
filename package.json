@@ -8,6 +8,7 @@
     "test": "mocha test --compilers js:babel-core/register",
     "build": "babel src -d lib",
     "clean": "rimraf lib",
+    "preversion": "npm run lint && npm run test",
     "version": "auto-changelog --package -t compact; git add CHANGELOG.md",
     "prepublish": "npm run build",
     "postpublish": "npm run clean"
