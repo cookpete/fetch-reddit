@@ -36,10 +36,11 @@ describe('extractPosts', () => {
   })
 
   it('comments', () => {
-    let links = extractPosts(comments)
+    let links = extractPosts(comments, '/r/testing/')
     assert.typeOf(links, 'array')
     assert.lengthOf(links, 153)
     links.forEach(verifyPost)
+    assert.propertyVal(links[0], 'permalink', 'https://www.reddit.com/r/testing/ctmu8ii')
   })
 
   it('morechildren', () => {

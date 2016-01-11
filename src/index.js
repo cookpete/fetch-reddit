@@ -139,9 +139,10 @@ function getText (post) {
   return post.body || post.selftext || ''
 }
 
-function getPermalink (post, path) {
+function getPermalink (post, path = '') {
   if (post.permalink) {
     return REDDIT_URL + post.permalink
   }
-  return REDDIT_URL + path + '/' + post.id
+  const slash = path.slice(-1) === '/' ? '' : '/'
+  return REDDIT_URL + path + slash + post.id
 }
