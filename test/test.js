@@ -57,6 +57,7 @@ describe('extractPosts', () => {
     links.forEach(verifyPost)
     assert.propertyVal(links[0], 'title', 'Sabre Dance')
     assert.propertyVal(links[0], 'url', 'http://www.youtube.com/watch?v=gqg3l3r_DRI')
+    assert.propertyVal(links[0], 'thumbnail', 'http://img.youtube.com/vi/gqg3l3r_DRI/default.jpg')
   })
 
   it('extracts links from self posts', () => {

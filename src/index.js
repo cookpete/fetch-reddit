@@ -5,6 +5,7 @@ const REDDIT_URL = 'https://www.reddit.com'
 const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
 const REPLACE_CHAR = String.fromCharCode(0)
 const INFER_TITLE_MAX_LENGTH = 128 // Max length of remaining text to use as a title for a link
+const MATCH_YOUTUBE_URL = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
 
 const KIND_COMMENT = 't1'
 const KIND_POST = 't3'
@@ -108,9 +109,9 @@ function postFromPost (post) {
     author: post.author,
     score: post.score,
     subreddit: post.subreddit,
+    thumbnail: getThumbnail(post),
     permalink: getPermalink(post),
     // Post-specific fields
-    thumbnail: post.thumbnail,
     num_comments: post.num_comments
   }
 }
@@ -129,6 +130,7 @@ function postFromComment (post, match, title = null, url, offset, path) {
     author: post.author,
     score: post.score,
     subreddit: post.subreddit,
+    thumbnail: getThumbnail(post, url),
     permalink: getPermalink(post, path),
     // Comment-specific fields
     comment_id: post.id
@@ -145,6 +147,18 @@ function getPermalink (post, path = '') {
   }
   const slash = path.slice(-1) === '/' ? '' : '/'
   return REDDIT_URL + path + slash + post.id
+}
+
+function getThumbnail (post, url = post.url) {
+  if (post.thumbnail) {
+    return post.thumbnail
+  }
+  const matchYouTube = url.match(MATCH_YOUTUBE_URL)
+  if (matchYouTube) {
+    const id = matchYouTube[1]
+    return `http://img.youtube.com/vi/${id}/default.jpg`
+  }
+  return null
 }
 
 // Remove markdown bold/italics
