@@ -123,7 +123,7 @@ function postFromComment (post, match, title = null, url, offset, path) {
   }
   return {
     id: post.id + ':' + offset,
-    title,
+    title: removeMarkdown(title),
     url,
     created: new Date(post.created_utc * 1000),
     author: post.author,
@@ -145,4 +145,11 @@ function getPermalink (post, path = '') {
   }
   const slash = path.slice(-1) === '/' ? '' : '/'
   return REDDIT_URL + path + slash + post.id
+}
+
+// Remove markdown bold/italics
+// From https://github.com/stiang/remove-markdown
+function removeMarkdown (string) {
+  if (!string) return string
+  return string.replace(/([\*_]{1,3})(\S.*?\S)\1/g, '$2')
 }
