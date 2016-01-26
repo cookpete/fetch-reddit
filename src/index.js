@@ -6,6 +6,7 @@ const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
 const REPLACE_CHAR = String.fromCharCode(0)
 const INFER_TITLE_MAX_LENGTH = 128 // Max length of remaining text to use as a title for a link
 const MATCH_YOUTUBE_URL = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
+const THUMBNAIL_PLACEHOLDERS = ['default', 'self', 'nsfw']
 
 const KIND_COMMENT = 't1'
 const KIND_POST = 't3'
@@ -150,7 +151,7 @@ function getPermalink (post, path = '') {
 }
 
 function getThumbnail (post, url = post.url) {
-  if (post.thumbnail) {
+  if (post.thumbnail && THUMBNAIL_PLACEHOLDERS.indexOf(post.thumbnail) === -1) {
     return post.thumbnail
   }
   const matchYouTube = url.match(MATCH_YOUTUBE_URL)
