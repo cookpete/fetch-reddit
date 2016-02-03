@@ -2,7 +2,7 @@ import 'isomorphic-fetch'
 import { stringify } from 'query-string'
 
 const REDDIT_URL = 'https://www.reddit.com'
-const MATCH_REPLY_URLS = /(?:\[([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
+const MATCH_REPLY_URLS = /(?:\[+([^\]]+)\]\s*\()?(https?\:\/\/[^\)\s]+)\)?/gi
 const REPLACE_CHAR = String.fromCharCode(0)
 const INFER_TITLE_MAX_LENGTH = 128 // Max length of remaining text to use as a title for a link
 const MATCH_YOUTUBE_URL = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
