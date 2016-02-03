@@ -18,12 +18,17 @@ function get (path, query) {
     .then(response => response.json())
 }
 
-export function getPosts (path, query = {}) {
+export function fetchPosts (path, query = {}) {
   return get(path, query)
     .then(data => ({
       posts: extractPosts(data, path),
       loadMore: getLoadMoreFn(data, { path, query })
     }))
+}
+
+export function getPosts (path, query = {}) {
+  console.warn('getPosts is deprecated and will be removed in future versions of fetch-reddit, please use fetchPosts instead')
+  return fetchPosts(path, query)
 }
 
 export function extractPosts (data, path) {
@@ -80,7 +85,7 @@ function getLoadMoreFn (data, options) {
   }
   if (data.data.after) {
     options.query.after = data.data.after
-    return () => getPosts(options.path, options.query)
+    return () => fetchPosts(options.path, options.query)
   }
   if (data.data.children) {
     return getLoadMoreFn(data.data.children.pop(), options)
